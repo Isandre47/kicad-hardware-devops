@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Visualisateur de Carte - BE</title>
+    <style>
+        body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', sans-serif; background-color: #1a1a24; color: #fff; overflow: hidden; }
+        .nav-bar { background-color: #23232f; padding: 10px 20px; height: 40px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #313244; }
+        .nav-bar h2 { margin: 0; font-size: 14pt; color: #89b4fa; }
+        .nav-bar a { background-color: #89b4fa; color: #11111b; text-decoration: none; padding: 6px 12px; border-radius: 4px; font-weight: bold; font-size: 10pt; }
+        .iframe-container { height: calc(100% - 62px); width: 100%; }
+        iframe { width: 100%; height: 100%; border: none; }
+    </style>
+</head>
+<body>
+
+<div class="nav-bar">
+    <h2>Visualisation PCB : Carte en cours</h2>
+    <a href="/sourcing.html">📊 Aller à l'Aide au Sourcing (Mouser)</a>
+</div>
+
+<div class="iframe-container">
+    <iframe src="/data/index.html"></iframe>
+</div>
+
+</body>
+</html>

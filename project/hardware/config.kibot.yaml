@@ -1,0 +1,21 @@
+kibot:
+    version: 1
+
+outputs:
+    - name: 'Page_Web_Interactive'
+      comment: 'Génère l InteractiveHtmlBom pour l atelier'
+      type: 'ibom'
+      dir: '..'
+      options:
+          dark_mode: true
+          output: 'index.html'
+
+    - name: 'Génération_BOM_CSV'
+      comment: 'Export de la liste des composants depuis le PCB'
+      type: 'bom'
+      dir: '.'
+      options:
+          format: 'CSV'
+          output: 'bom.csv'
+          # Force l'extraction exclusive à partir du fichier de routage pcb
+          from_pcb: true
