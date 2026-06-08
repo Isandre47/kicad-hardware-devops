@@ -5,36 +5,47 @@
   <title>Sourcing Interactif - Bureau d'Études</title>
   <style>
     body { font-family: 'Segoe UI', sans-serif; background-color: #1e1e2e; color: #cdd6f4; margin: 40px; }
-    .header-box { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
     h1 { color: #89b4fa; margin: 0; }
-    .btn-back { background-color: #45475a; color: #cdd6f4; text-decoration: none; padding: 8px 16px; border-radius: 4px; font-weight: bold; }
     table { width: 100%; border-collapse: collapse; margin-top: 20px; background-color: #313244; }
     th, td { padding: 12px; text-align: left; border-bottom: 1px solid #45475a; }
     th { background-color: #45475a; color: #89b4fa; }
     select { background-color: #45475a; color: #cdd6f4; border: 1px solid #89b4fa; padding: 5px; border-radius: 4px; width: 100%; }
     input[type="text"] { background:#1e1e2e; color:#fff; border:1px solid #45475a; padding:5px; border-radius:4px; width: 70%; }
-    .btn-search { background-color: #89b4fa; color: #11111b; border: none; padding: 6px 12px; cursor: pointer; border-radius: 4px; font-weight: bold; }
-    .stock-ok { color: #a6e3a1; font-weight: bold; }
-    .stock-none { color: #f38ba8; font-weight: bold; }
   </style>
 </head>
 <body>
 
-<div class="header-box">
-  <h1>Aide à la Décision - Sourcing Composants (Mouser API)</h1>
-  <a href="/" class="btn-back">← Retour à la carte interactive</a>
+<div id="budget-banner" style="
+    position: -webkit-sticky; /* Pour la compatibilité Safari */
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: #23232f;
+    padding: 15px 20px;
+    border-bottom: 2px solid #a6e3a1;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+">
+  <span style="color: #89b4fa; font-size: 13pt; font-weight: bold;">💰 Estimation Budgétaire en Direct</span>
+  <div style="font-size: 14pt; font-weight: bold;">
+    <span style="color: #cdd6f4;">Total Projet : </span>
+    <span id="global-total" style="color: #a6e3a1; background-color: #1e1e2e; padding: 5px 15px; border-radius: 4px; border: 1px solid #a6e3a1;">0.00 €</span>
+  </div>
 </div>
 
 <table>
   <thead>
   <tr>
-    <th style="width: 10%;">Repère</th>
-    <th style="width: 15%;">Valeur KiCad</th>
-    <th style="width: 45%;">Recherche Mouser / Sélection</th>
+    <th style="width: 8%;">Repère</th>
+    <th style="width: 12%;">Valeur KiCad</th>
+    <th style="width: 5%; text-align: center;">Qté</th> <th style="width: 35%;">Recherche Mouser / Sélection</th>
     <th style="width: 10%;">Fabricant</th>
     <th style="width: 10%;">Stock</th>
-    <th style="width: 10%;">Prix Base</th>
-  </tr>
+    <th style="width: 10%; text-align: right;">Prix Unit.</th>
+    <th style="width: 10%; text-align: right;">Total Ligne</th> </tr>
   </thead>
   <tbody id="bom-table-body">
   <tr><td colspan="6">Chargement de la BOM depuis l'API FastAPI...</td></tr>
@@ -42,5 +53,6 @@
 </table>
 
 <script src="/js/sourcing.js"></script>
+<script src="/js/nav.js"></script>
 </body>
 </html>

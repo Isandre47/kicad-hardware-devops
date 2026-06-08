@@ -5,7 +5,7 @@ outputs:
     - name: 'Page_Web_Interactive'
       comment: 'Génère l InteractiveHtmlBom pour l atelier'
       type: 'ibom'
-      dir: '..'
+      dir: '.'
       options:
           dark_mode: true
           output: 'index.html'

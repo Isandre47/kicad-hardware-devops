@@ -2,26 +2,36 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Visualisateur de Carte - BE</title>
+    <title>Visualisateur de Carte - DevOps</title>
     <style>
         body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', sans-serif; background-color: #1a1a24; color: #fff; overflow: hidden; }
-        .nav-bar { background-color: #23232f; padding: 10px 20px; height: 40px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #313244; }
-        .nav-bar h2 { margin: 0; font-size: 14pt; color: #89b4fa; }
-        .nav-bar a { background-color: #89b4fa; color: #11111b; text-decoration: none; padding: 6px 12px; border-radius: 4px; font-weight: bold; font-size: 10pt; }
         .iframe-container { height: calc(100% - 62px); width: 100%; }
         iframe { width: 100%; height: 100%; border: none; }
     </style>
 </head>
 <body>
 
-<div class="nav-bar">
-    <h2>Visualisation PCB : Carte en cours</h2>
-    <a href="/sourcing.html">📊 Aller à l'Aide au Sourcing (Mouser)</a>
-</div>
-
 <div class="iframe-container">
-    <iframe src="/data/index.html"></iframe>
+    <iframe id="ibom-viewer" src=""></iframe>
 </div>
 
+<script src="./js/nav.js"></script>
+
+<script>
+  // Extraction des paramètres pour charger le bon jumeau numérique
+  const urlParams = new URLSearchParams(window.location.search);
+  const projectName = urlParams.get('name');
+
+  const iframe = document.getElementById('ibom-viewer');
+
+  if (projectName) {
+    const projectStem = projectName.split('.').slice(0, -1).join('.');
+    // Nginx pointe vers /data/uploads/nom_du_projet/nom_du_projet-ibom.html
+    iframe.src = `/uploads/${projectStem}/index.html`;
+  } else {
+    // Fallback si aucun projet (démo par défaut)
+    iframe.src = "/uploads/index.html";
+  }
+</script>
 </body>
 </html>

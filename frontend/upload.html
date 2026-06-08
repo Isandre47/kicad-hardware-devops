@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload de Projet - CAO DevOps</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #1e1e2e; color: #cdd6f4; margin: 0; padding: 0; }
+        .upload-container { background-color: #313244; padding: 40px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); text-align: center; width: 400px; }
+        h1 { color: #89b4fa; margin-top: 0; font-size: 18pt; }
+        p { color: #a6adc8; font-size: 10pt; margin-bottom: 25px; }
+        .file-input-wrapper { margin-bottom: 20px; }
+        input[type="file"] { display: none; }
+        .custom-file-upload { border: 2px dashed #89b4fa; border-radius: 4px; padding: 20px; display: block; cursor: pointer; color: #89b4fa; font-weight: bold; }
+        .custom-file-upload:hover { background-color: #45475a; }
+        .btn-submit { background-color: #a6e3a1; color: #11111b; border: none; padding: 10px 20px; font-weight: bold; border-radius: 4px; cursor: pointer; width: 100%; font-size: 11pt; display: none; }
+        .loading-box { display: none; color: #f9e2af; font-style: italic; margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+<div style="display: flex; flex-direction: column; width: 100%; height: 100vh;">
+    <script src="/js/nav.js"></script>
+
+    <div style="flex-grow: 1; display: flex; justify-content: center; align-items: center; background-color: #1e1e2e;">
+        <div class="upload-container">
+            <h1>Analyseur de Cartes Électroniques</h1>
+            <p>Déposez votre fichier KiCad (<code>.kicad_pcb</code>) ou Fusion/Eagle (<code>.brd</code>)</p>
+
+            <div class="file-input-wrapper">
+                <label for="file-field" class="custom-file-upload" id="file-label">
+                    📁 Choisir un fichier carte
+                </label>
+                <input type="file" id="file-field" accept=".kicad_pcb,.brd" onchange="fileSelected()">
+            </div>
+
+            <button class="btn-submit" id="submit-btn" onclick="envoyerFichier()">🚀 Lancer l'analyse Supply Chain</button>
+
+            <div class="loading-box" id="loading-text" style="margin-top: 20px;">
+                <div class="spinner"></div>
+                <div style="margin-top: 10px; color: #f9e2af; font-style: italic;">
+                    Extraction de la BOM et génération du jumeau numérique par KiBot...
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+  const BACKEND_URL = "http://localhost:5000";
+
+  function fileSelected() {
+    const fileInput = document.getElementById('file-field');
+    const fileLabel = document.getElementById('file-label');
+    const submitBtn = document.getElementById('submit-btn');
+
+    if (fileInput.files.length > 0) {
+      fileLabel.innerHTML = `✓ ${fileInput.files[0].name}`;
+      fileLabel.style.borderColor = "#a6e3a1";
+      fileLabel.style.color = "#a6e3a1";
+      submitBtn.style.display = "block";
+    }
+  }
+
+  function envoyerFichier() {
+    const fileInput = document.getElementById('file-field');
+    if (fileInput.files.length === 0) return;
+
+    const formData = new FormData();
+    formData.append("file", fileInput.files[0]);
+
+    document.getElementById('submit-btn').style.display = "none";
+    document.getElementById('loading-text').style.display = "block";
+
+    fetch(`${BACKEND_URL}/api/upload`, {
+      method: 'POST',
+      body: formData
+    })
+        .then(res => {
+          if (!res.ok) throw new Error("Erreur lors du traitement");
+          return res.json();
+        })
+        .then(data => {
+          window.location.href = `/sourcing.html?project_id=${data.project_id}&name=${encodeURIComponent(data.filename)}`;
+        })
+        .catch(err => {
+          alert("Erreur : " + err.message);
+          document.getElementById('submit-btn').style.display = "block";
+          document.getElementById('loading-text').style.display = "none";
+        });
+  }
+</script>
+</body>
+</html>

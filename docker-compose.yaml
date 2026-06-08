@@ -1,41 +1,23 @@
 services:
-    # 1. Le générateur (KiBot) : Extrait les données et s'arrête
-    kibot-generator:
-        image: ghcr.io/inti-cmnb/kicad8_auto:latest
-        volumes:
-            - ./project:/tmp/work
-        environment:
-            - INTERACTIVE=0
-        entrypoint: >
-            /bin/bash -c "
-            echo 'Création du schéma virtuel vide...';
-            rm -f /tmp/work/hardware/*.kicad_sch;
-            echo -e '(kicad_sch (version 20231120) (generator kibot)\n)' > /tmp/work/hardware/carte.kicad_sch;
-            echo 'Génération du CSV depuis le PCB...';
-            cd /tmp/work/hardware && kibot -c config.kibot.yaml -b carte.kicad_pcb -e carte.kicad_sch;
-            "
-
-    # 2. Le Backend (FastAPI + ORM + SQLite) : Reste toujours allumé
+    # Le Backend (FastAPI + ORM + SQLite)
     backend:
-        build: ./backend
-        dns:
-            - 8.8.8.8
-            - 1.1.1.1
+        build:
+            context: ./backend
+            dockerfile: Dockerfile
+        container_name: hardware-backend
         ports:
             - "5000:5000" # API accessible sur le port 5000
         volumes:
-            - ./backend:/app # Permet de modifier le code Python en direct sans relancer le conteneur
-            - ./project:/app/data # Donne accès aux fichiers KiCad, au bom.csv et à la BDD sourcing.db
-        depends_on:
-            kibot-generator:
-                condition: service_completed_successfully
+            - ./data:/app/data
+            - ./backend:/app # Donne accès aux fichiers KiCad, au bom.csv et à la BDD sourcing.db
+        restart: unless-stopped
 
-    # 3. Le Frontend (Ton futur Vue.js / Vuetify)
-    # Pour le moment, on utilise une image Node ou un simple serveur statique pendant que tu le développes
+    # Le Frontend
     frontend:
         image: nginx:alpine
         ports:
             - "8080:80"
         volumes:
-            - ./frontend:/usr/share/nginx/html # Tes fichiers HTML/JS de dev
-            - ./project:/usr/share/nginx/html/data # Donne accès aux fichiers KiBot dans http://localhost:8080/data/
+            - ./frontend:/usr/share/nginx/html
+            - ./data/uploads:/usr/share/nginx/html/uploads
+            - ./data/hardware:/usr/share/nginx/html/hardware # Donne accès aux fichiers KiBot dans http://localhost:8080/data/
