@@ -90,10 +90,13 @@ async def upload_kicad_project(file: UploadFile = File(...), db: Session = Depen
     db.commit()
     db.refresh(nuevo_proyecto)
 
-    # Création du schéma virtuel vide exigé par KiBot dans le dossier du projet
+    # Création du schéma virtuel vide conforme aux normes KiCad modernes
     schema_virtuel = project_dir / f"{project_name}.kicad_sch"
-    with open(schema_virtuel, "w") as f:
-        f.write("(kicad_sch (version 20231120) (generator kibot)\n)")
+    with open(schema_virtuel, "w", encoding="utf-8") as f:
+        # En-tête minimal standard valide pour empêcher le parseur de basculer en V6
+        f.write('(kicad_sch (version 20240101) (generator "kicad")\n')
+        f.write('  (uuid "00000000-0000-0000-0000-000000000000")\n')
+        f.write(')\n')
 
     # EXÉCUTION DE KIBOT (La magie DevOps Hardware)
     # On utilise ton fichier de configuration config.kibot.yaml global

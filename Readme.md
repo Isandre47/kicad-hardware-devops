@@ -1,6 +1,6 @@
 Petit projet pour améliorer le choix des composants électronique par fournisseur.
 
-L'idée est de partir d'un schéma électronique dont on a la liste des composants, ( via Kicad pour le moment ) puis on va récupérer les informations chez divers fournisseurs de composants pour afficher le résultat directement sur un site web.
+L'idée est de partir d'un schéma électronique dont on a la liste des composants, ( via Kicad 10, normalement ) puis on va récupérer les informations chez divers fournisseurs de composants pour afficher le résultat directement sur un site web.
 
 Cela permettra, entre autres choses, d'économiser du temps à chercher sur chaque site la disponibilité, les prix etc..
 

@@ -1,5 +1,4 @@
-# Base stable avec KiCad et KiBot
-FROM ghcr.io/inti-cmnb/kicad8_auto:latest
+FROM ghcr.io/inti-cmnb/kicad10_auto:latest
 
 WORKDIR /app
 
